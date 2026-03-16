@@ -16,8 +16,8 @@ client.on("ready", () => {
 client.on("message", (msg) => {
   const text = msg.body.trim().toLowerCase();
 
-  const GREETINGS  = ["hai", "hi", "hellow", "hello", "hey", "hoi"];
-  if (GREETINGS .includes(text)) {
+  const GREETINGS = ["hai", "hi", "hellow", "hello", "hey", "hoi"];
+  if (GREETINGS.includes(text)) {
     const balance = ledger.getBalance();
 
     msg.reply(`Hey Munnas 👋
@@ -49,7 +49,11 @@ client.on("message", (msg) => {
 
     const message = history
       .map((t) => {
-        const date = new Date(t.date).toLocaleString();
+        const d = new Date(t.date);
+
+        const date =
+          d.toLocaleDateString() + " " +
+          d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
         const sign = t.type === "credit" ? "+" : "-";
         return `${date} ${sign}₹${t.amount}`;
       })
