@@ -5,6 +5,8 @@ const qrcode = require("qrcode-terminal");
 
 const ledger = require("../services/ledgerService");
 const MESSAGES = require("../constants/messages");
+const COMMANDS = require("../constants/commands");
+const GREETINGS = require("../constants/greetings");
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -12,7 +14,6 @@ const client = new Client({
 
 const ALLOWED_USER = process.env.ALLOWED_USER;
 
-const GREETINGS = ["hai", "hi", "hellow", "hello", "hey", "hoi"];
 
 client.on("qr", (qr) => {
   qrcode.generate(qr, { small: true });
@@ -35,7 +36,7 @@ client.on("message", (msg) => {
   }
 
   // Menu
-  if (text === "menu") {
+  if (text === COMMANDS.MENU) {
     msg.reply(MESSAGES.MENU);
     return;
   }
@@ -76,7 +77,7 @@ client.on("message", (msg) => {
   }
 
   // Balance
-  if (text === "balance") {
+  if (text === COMMANDS.BALANCE) {
     const balance = ledger.getBalance();
     msg.reply(MESSAGES.BALANCE(balance));
     return;
@@ -84,7 +85,7 @@ client.on("message", (msg) => {
 
 
   // Statement (last 10 transactions)
-  if (text === "statement") {
+  if (text === COMMANDS.STATEMENT) {
     const history = ledger.transactions
       .slice(-10)
       .map((t) => {
@@ -104,7 +105,7 @@ client.on("message", (msg) => {
   }
 
   // Today's summary
-  if (text === "today") {
+  if (text === COMMANDS.TODAY) {
     const today = new Date().toLocaleDateString();
 
     const transactions = ledger.transactions.filter(
@@ -124,7 +125,7 @@ client.on("message", (msg) => {
   }
 
   // Reset
-  if (text === "reset") {
+  if (text === COMMANDS.RESET) {
     ledger.resetLedger();
     msg.reply(MESSAGES.RESET_SUCCESS);
     return;
