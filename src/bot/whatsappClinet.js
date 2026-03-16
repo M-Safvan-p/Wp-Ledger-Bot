@@ -1,9 +1,13 @@
-const { Client } = require("whatsapp-web.js");
+require("dotenv").config();
+
+const { Client, LocalAuth } = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
 
 const ledger = require("../services/ledgerService");
 
-const client = new Client();
+const client = new Client({
+  authStrategy: new LocalAuth(),
+});
 
 client.on("qr", (qr) => {
   qrcode.generate(qr, { small: true });
@@ -14,6 +18,11 @@ client.on("ready", () => {
 });
 
 client.on("message", (msg) => {
+  const ALLOWED_USER = process.env.ALLOWED_USER;
+  if (msg.from !== ALLOWED_USER) {
+    return;
+  }
+
   const text = msg.body.trim().toLowerCase();
 
   const GREETINGS = ["hai", "hi", "hellow", "hello", "hey", "hoi"];
@@ -27,6 +36,15 @@ client.on("message", (msg) => {
 
   if (text.startsWith("+")) {
     const amount = parseInt(text.slice(1));
+
+    if (isNaN(amount)) {
+      msg.reply("Invalid amount.");
+      return;
+    }
+  }
+
+  if (text.startsWith("+")) {
+    const amount = parseInt(text.slice(1));
     const balance = ledger.addMoney(amount);
 
     msg.reply(`Added ₹${amount}\nBalance: ₹${balance}`);
@@ -34,6 +52,12 @@ client.on("message", (msg) => {
 
   if (text.startsWith("-")) {
     const amount = parseInt(text.slice(1));
+
+    if (ledger.getBalance() < amount) {
+      msg.reply("Insufficient balance.");
+      return;
+    }
+
     const balance = ledger.deductMoney(amount);
 
     msg.reply(`Deducted ₹${amount}\nBalance: ₹${balance}`);
@@ -52,7 +76,8 @@ client.on("message", (msg) => {
         const d = new Date(t.date);
 
         const date =
-          d.toLocaleDateString() + " " +
+          d.toLocaleDateString() +
+          " " +
           d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
         const sign = t.type === "credit" ? "+" : "-";
         return `${date} ${sign}₹${t.amount}`;
