@@ -36,7 +36,7 @@ client.on("message", (msg) => {
     ledger.transactions.push({
       type: "credit",
       amount: amount,
-      date: new Date()
+      date: new Date(),
     });
 
     saveLedger(ledger);
@@ -53,7 +53,7 @@ client.on("message", (msg) => {
     ledger.transactions.push({
       type: "debit",
       amount: amount,
-      date: new Date()
+      date: new Date(),
     });
 
     saveLedger(ledger);
@@ -74,6 +74,16 @@ client.on("message", (msg) => {
       .join("\n");
 
     msg.reply(history || "No transactions yet.");
+  }
+
+  // Reset ledger
+  if (text === "Reset") {
+    ledger.balance = 0;
+    ledger.transactions = [];
+
+    saveLedger(ledger);
+
+    msg.reply("Ledger has been reset.\nBalance: ₹0");
   }
 });
 
