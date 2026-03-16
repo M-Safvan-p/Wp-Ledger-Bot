@@ -34,6 +34,19 @@ client.on("message", (msg) => {
     Your current balance is: ₹${balance}`);
   }
 
+  if (text === "menu") {
+    msg.reply(`Welcome to Safvan's Bank 🏦
+
+Commands:
+
++amount → Add money
+-amount → Deduct money
+balance → Check balance
+history → Last transactions
+reset → Reset ledger
+menu → Show commands`);
+  }
+
   if (text.startsWith("+")) {
     const amount = parseInt(text.slice(1));
 
