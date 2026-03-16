@@ -4,10 +4,15 @@ const { Client, LocalAuth } = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
 
 const ledger = require("../services/ledgerService");
+const MESSAGES = require("../constants/messages");
 
 const client = new Client({
   authStrategy: new LocalAuth(),
 });
+
+const ALLOWED_USER = process.env.ALLOWED_USER;
+
+const GREETINGS = ["hai", "hi", "hellow", "hello", "hey", "hoi"];
 
 client.on("qr", (qr) => {
   qrcode.generate(qr, { small: true });
@@ -18,92 +23,115 @@ client.on("ready", () => {
 });
 
 client.on("message", (msg) => {
-  const ALLOWED_USER = process.env.ALLOWED_USER;
-  if (msg.from !== ALLOWED_USER) {
-    return;
-  }
+  if (msg.from !== ALLOWED_USER) return;
 
   const text = msg.body.trim().toLowerCase();
 
-  const GREETINGS = ["hai", "hi", "hellow", "hello", "hey", "hoi"];
+  // Greeting
   if (GREETINGS.includes(text)) {
     const balance = ledger.getBalance();
-
-    msg.reply(`Hey Munnas 👋
-    Welcome to Safvan's Bank 🏦
-    Your current balance is: ₹${balance}`);
+    msg.reply(MESSAGES.WELCOME(balance));
+    return;
   }
 
+  // Menu
   if (text === "menu") {
-    msg.reply(`Welcome to Safvan's Bank 🏦
-
-Commands:
-
-+amount → Add money
--amount → Deduct money
-balance → Check balance
-history → Last transactions
-reset → Reset ledger
-menu → Show commands`);
+    msg.reply(MESSAGES.MENU);
+    return;
   }
 
+  // Deposit
   if (text.startsWith("+")) {
     const amount = parseInt(text.slice(1));
 
     if (isNaN(amount)) {
-      msg.reply("Invalid amount.");
+      msg.reply(MESSAGES.INVALID_AMOUNT);
       return;
     }
-  }
 
-  if (text.startsWith("+")) {
-    const amount = parseInt(text.slice(1));
     const balance = ledger.addMoney(amount);
 
-    msg.reply(`Added ₹${amount}\nBalance: ₹${balance}`);
+    msg.reply(MESSAGES.ADD_SUCCESS(amount, balance));
+    return;
   }
 
+  // Withdraw
   if (text.startsWith("-")) {
     const amount = parseInt(text.slice(1));
 
+    if (isNaN(amount)) {
+      msg.reply(MESSAGES.INVALID_AMOUNT);
+      return;
+    }
+
     if (ledger.getBalance() < amount) {
-      msg.reply("Insufficient balance.");
+      msg.reply(MESSAGES.INSUFFICIENT_BALANCE);
       return;
     }
 
     const balance = ledger.deductMoney(amount);
 
-    msg.reply(`Deducted ₹${amount}\nBalance: ₹${balance}`);
+    msg.reply(MESSAGES.DEDUCT_SUCCESS(amount, balance));
+    return;
   }
 
+  // Balance
   if (text === "balance") {
     const balance = ledger.getBalance();
-    msg.reply(`Current Balance: ₹${balance}`);
+    msg.reply(MESSAGES.BALANCE(balance));
+    return;
   }
 
-  if (text === "history") {
-    const history = ledger.getHistory();
 
-    const message = history
+  // Statement (last 10 transactions)
+  if (text === "statement") {
+    const history = ledger.transactions
+      .slice(-10)
       .map((t) => {
         const d = new Date(t.date);
 
-        const date =
-          d.toLocaleDateString() +
-          " " +
+        const date = d.toLocaleDateString() + " " +
           d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
         const sign = t.type === "credit" ? "+" : "-";
+
         return `${date} ${sign}₹${t.amount}`;
       })
       .join("\n");
 
-    msg.reply(message || "No transactions yet.");
+    msg.reply(history || "No transactions yet.");
+    return;
   }
 
+  // Today's summary
+  if (text === "today") {
+    const today = new Date().toLocaleDateString();
+
+    const transactions = ledger.transactions.filter(
+      (t) => new Date(t.date).toLocaleDateString() === today,
+    );
+
+    let credit = 0;
+    let debit = 0;
+
+    transactions.forEach((t) => {
+      if (t.type === "credit") credit += t.amount;
+      if (t.type === "debit") debit += t.amount;
+    });
+
+    msg.reply(MESSAGES.TODAY_SUMMARY(credit, debit));
+    return;
+  }
+
+  // Reset
   if (text === "reset") {
     ledger.resetLedger();
-    msg.reply("Ledger reset. Balance: ₹0");
+    msg.reply(MESSAGES.RESET_SUCCESS);
+    return;
   }
+
+  // Unknown command
+  msg.reply(MESSAGES.UNKNOWN_COMMAND);
 });
 
 module.exports = client;
