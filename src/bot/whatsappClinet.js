@@ -7,6 +7,7 @@ const ledger = require("../services/ledgerService");
 const MESSAGES = require("../constants/messages");
 const COMMANDS = require("../constants/commands");
 const GREETINGS = require("../constants/greetings");
+const formatDate = require("../utils/formatDate");
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -89,11 +90,7 @@ client.on("message", (msg) => {
     const history = ledger.transactions
       .slice(-10)
       .map((t) => {
-        const d = new Date(t.date);
-
-        const date = d.toLocaleDateString() + " " +
-          d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-
+        const date = formatDate(t.date)
         const sign = t.type === "credit" ? "+" : "-";
 
         return `${date} ${sign}₹${t.amount}`;
