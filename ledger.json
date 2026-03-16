@@ -1,0 +1,30 @@
+{
+  "balance": 800,
+  "transactions": [
+    {
+      "type": "credit",
+      "amount": 1000,
+      "date": "2026-03-16T09:23:01.455Z"
+    },
+    {
+      "type": "credit",
+      "amount": 100,
+      "date": "2026-03-16T09:23:10.895Z"
+    },
+    {
+      "type": "debit",
+      "amount": 200,
+      "date": "2026-03-16T09:23:20.472Z"
+    },
+    {
+      "type": "credit",
+      "amount": 200,
+      "date": "2026-03-16T09:30:31.920Z"
+    },
+    {
+      "type": "debit",
+      "amount": 300,
+      "date": "2026-03-16T09:30:58.287Z"
+    }
+  ]
+}
