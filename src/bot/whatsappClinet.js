@@ -26,22 +26,21 @@ client.on("ready", () => {
 
 client.on("message", (msg) => {
   if (msg.from !== ALLOWED_USER) return;
-
   const text = msg.body.trim().toLowerCase();
-
+  
   // Greeting
   if (GREETINGS.includes(text)) {
     const balance = ledger.getBalance();
     msg.reply(MESSAGES.WELCOME(balance));
     return;
   }
-
+  
   // Menu
   if (text === COMMANDS.MENU) {
     msg.reply(MESSAGES.MENU);
     return;
   }
-
+  
   // Deposit
   if (text.startsWith("+")) {
     const amount = parseInt(text.slice(1));
@@ -87,7 +86,7 @@ client.on("message", (msg) => {
 
   // Statement (last 10 transactions)
   if (text === COMMANDS.STATEMENT) {
-    const history = ledger.transactions
+    const history = ledger.getTransactions()
       .slice(-10)
       .map((t) => {
         const date = formatDate(t.date)
@@ -105,7 +104,7 @@ client.on("message", (msg) => {
   if (text === COMMANDS.TODAY) {
     const today = new Date().toLocaleDateString();
 
-    const transactions = ledger.transactions.filter(
+    const transactions = ledger.getTransactions().filter(
       (t) => new Date(t.date).toLocaleDateString() === today,
     );
 
@@ -133,3 +132,4 @@ client.on("message", (msg) => {
 });
 
 module.exports = client;
+ 

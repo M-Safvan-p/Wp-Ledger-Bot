@@ -59,6 +59,12 @@ function getHistory() {
   return ledger.transactions.slice(-5);
 }
 
+function getTransactions() {
+  const ledger = loadLedger();
+
+  return ledger.transactions;
+}
+
 function getBalance() {
   const ledger = loadLedger();
 
@@ -70,5 +76,6 @@ module.exports = {
   deductMoney,
   resetLedger,
   getHistory,
+  getTransactions,
   getBalance
 };
