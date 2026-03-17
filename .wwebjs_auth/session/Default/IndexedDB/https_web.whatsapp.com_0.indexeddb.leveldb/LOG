@@ -1,0 +1,32 @@
+2026/03/17-11:49:16.481 55dc Creating DB C:\Users\SAFVAN\Desktop\Whatsapp-ledger-bot\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb since it was missing.
+2026/03/17-11:49:16.489 55dc Reusing MANIFEST C:\Users\SAFVAN\Desktop\Whatsapp-ledger-bot\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/03/17-11:50:28.686 55dc Level-0 table #5: started
+2026/03/17-11:50:28.708 55dc Level-0 table #5: 1022251 bytes OK
+2026/03/17-11:50:28.711 55dc Delete type=0 #3
+2026/03/17-11:50:33.564 6d50 Level-0 table #7: started
+2026/03/17-11:50:33.585 6d50 Level-0 table #7: 1012254 bytes OK
+2026/03/17-11:50:33.588 6d50 Delete type=0 #4
+2026/03/17-11:50:33.650 6d50 Compacting 1@1 + 1@2 files
+2026/03/17-11:50:33.677 6d50 Generated table #8@1: 21606 keys, 862718 bytes
+2026/03/17-11:50:33.678 6d50 Compacted 1@1 + 1@2 files => 862718 bytes
+2026/03/17-11:50:33.679 6d50 compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/03/17-11:50:33.679 6d50 Delete type=2 #5
+2026/03/17-11:50:33.679 6d50 Delete type=2 #7
+2026/03/17-11:50:43.626 6d50 Level-0 table #10: started
+2026/03/17-11:50:43.668 6d50 Level-0 table #10: 979208 bytes OK
+2026/03/17-11:50:43.671 6d50 Delete type=0 #6
+2026/03/17-11:50:49.320 7690 Compacting 1@1 + 1@2 files
+2026/03/17-11:50:49.361 7690 Generated table #11@1: 32530 keys, 1382581 bytes
+2026/03/17-11:50:49.361 7690 Compacted 1@1 + 1@2 files => 1382581 bytes
+2026/03/17-11:50:49.363 7690 compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/03/17-11:50:49.363 7690 Delete type=2 #8
+2026/03/17-11:50:49.363 7690 Delete type=2 #10
+2026/03/17-11:51:53.375 80c Level-0 table #13: started
+2026/03/17-11:51:53.395 80c Level-0 table #13: 1063530 bytes OK
+2026/03/17-11:51:53.396 80c Delete type=0 #9
+2026/03/17-11:51:53.588 6d50 Compacting 1@1 + 1@2 files
+2026/03/17-11:51:53.624 6d50 Generated table #14@1: 36350 keys, 1560649 bytes
+2026/03/17-11:51:53.624 6d50 Compacted 1@1 + 1@2 files => 1560649 bytes
+2026/03/17-11:51:53.625 6d50 compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/03/17-11:51:53.625 6d50 Delete type=2 #11
+2026/03/17-11:51:53.625 6d50 Delete type=2 #13

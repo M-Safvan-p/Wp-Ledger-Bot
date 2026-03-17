@@ -11,6 +11,9 @@ const formatDate = require("../utils/formatDate");
 
 const client = new Client({
   authStrategy: new LocalAuth(),
+  puppeteer: {
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  },
 });
 
 const ALLOWED_USER = process.env.ALLOWED_USER;
